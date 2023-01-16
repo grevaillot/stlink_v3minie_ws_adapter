@@ -1,0 +1,7 @@
+tags
+*.elf
+*.bin
+*.map
+*.d
+*.o
+generated.*.ld
