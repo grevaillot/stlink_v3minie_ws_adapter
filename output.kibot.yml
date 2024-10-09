@@ -1,0 +1,177 @@
+# Gerber and drill files for JLCPCB, without stencil
+# URL: https://jlcpcb.com/
+kibot:
+  version: 1
+
+globals:
+  resources_dir: ci
+
+filters:
+  - name: only_jlc_parts
+    comment: "Only parts with JLC (LCSC) code"
+    type: generic
+    include_only:
+      - column: "LCSC"
+        regex: '^C\d+'
+
+variants:
+  - name: rotated
+    comment: "Just a place holder for the rotation filter"
+    type: kibom
+    variant: rotated
+    pre_transform: _rot_footprint
+
+# JLCPCB Gerber Output
+outputs:
+  - name: JLCPCB_gerbers
+    comment: Gerbers compatible with JLCPCB
+    type: gerber
+    dir: JLCPCB
+    options: &gerber_options
+      exclude_edge_layer: true
+      exclude_pads_from_silkscreen: true
+      plot_sheet_reference: false
+      plot_footprint_refs: true
+      plot_footprint_values: false
+      force_plot_invisible_refs_vals: false
+      tent_vias: true
+      use_protel_extensions: true
+      create_gerber_job_file: false
+      disable_aperture_macros: true
+      gerber_precision: 4.6
+      use_gerber_x2_attributes: false
+      use_gerber_net_attributes: false
+      line_width: 0.1
+      subtract_mask_from_silk: true
+    layers:
+      # Note: a more generic approach is to use 'copper' but then the filenames
+      # are slightly different.
+      - F.Cu
+      - B.Cu
+      - F.Paste
+      - B.Paste
+      - F.SilkS
+      - B.SilkS
+      - F.Mask
+      - B.Mask
+      - Edge.Cuts
+
+  # JLCPCB drill files
+  - name: JLCPCB_drill
+    comment: Drill files compatible with JLCPCB
+    type: excellon
+    dir: JLCPCB
+    options:
+      pth_and_npth_single_file: false
+      pth_id: "-PTH"
+      npth_id: "-NPTH"
+      metric_units: false
+      output: "%f%i.%x"
+
+  # zip all JLCPCB gerber and drill files together
+  - name: JLCPCB
+    comment: ZIP file for JLCPCB
+    type: compress
+    dir: Fabrication/JLCPCB
+    options:
+      files:
+        - from_output: JLCPCB_gerbers
+          dest: /
+        - from_output: JLCPCB_drill
+          dest: /
+
+  # html ibom
+  - name: ibom
+    comment: Interactive BOM
+    type: ibom
+    dir: Fabrication/ibom
+    options:
+      dark_mode: true
+      name_format: "index"
+
+  # JLCPCB assembly positions of components
+  - name: "JLCPCB_position"
+    comment: "Pick and place file, JLCPCB style"
+    type: position
+    dir: Fabrication/JLCPCB-BOM
+    options:
+      variant: rotated
+      output: "%f_cpl_jlc.%x"
+      format: CSV
+      units: millimeters
+      separate_files_for_front_and_back: false
+      only_smd: true
+      columns:
+        - id: Ref
+          name: Designator
+        - Val
+        - Package
+        - id: PosX
+          name: "Mid X"
+        - id: PosY
+          name: "Mid Y"
+        - id: Rot
+          name: Rotation
+        - id: Side
+          name: Layer
+
+  # JLCPCB Bom for assembly or for LCSC order
+  - name: "JLCPCB_bom"
+    comment: "BoM for JLCPCB"
+    type: bom
+    dir: Fabrication/JLCPCB-BOM
+    options:
+      output: "%f_%i_jlc.%x"
+      exclude_filter: "only_jlc_parts"
+      ref_separator: ","
+      columns:
+        - field: Value
+          name: Comment
+        - field: References
+          name: Designator
+        - Footprint
+        - field: "LCSC"
+          name: "LCSC part number"
+        - field: "Quantity Per PCB"
+          name: "QTY"
+      csv:
+        hide_pcb_info: true
+        hide_stats_info: true
+        quote_all: true
+
+  # PDF of Schematic with dracula theme
+  - name: "SchPrint"
+    comment: "Print schematic PDF"
+    type: pdf_sch_print
+    dir: Fabrication/PDFs
+    options:
+      color_theme: dracula
+      background_color: true
+      
+      
+  - name: basic_render_3d_top
+    comment: 3D view from top
+    type: render_3d
+    dir: 3D
+    options:
+      ray_tracing: true
+      orthographic: true
+      
+  - name: basic_render_3d_30deg
+    comment: 3D view from 30 degrees
+    type: render_3d
+    dir: 3D
+    output_id: 30deg
+    options:
+      ray_tracing: true
+      rotate_x: 3
+      rotate_z: -2
+  - name: basic_render_3d_bottom
+    comment: 3D view from bottom
+    type: render_3d
+    dir: 3D
+    options:
+      ray_tracing: true
+      orthographic: true
+      view: bottom
+

@@ -1,0 +1,25 @@
+on:
+  push:
+    paths:
+    - '*.kicad_sch'
+    - '*.kicad_pcb'
+    - '.github/workflow/kibot.yml'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: '0'
+    - uses: INTI-CMNB/KiBot@v2_k8
+      with:
+        config: output.kibot.yml
+        dir: output
+        schema: 'stlink_v3mini_adapter.kicad_sch'
+        board: 'stlink_v3mini_adapter.kicad_pcb'
+    - name: upload results
+      uses: actions/upload-artifact@v4
+      with:
+        name: output
+        path: output
