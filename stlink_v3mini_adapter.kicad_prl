@@ -65,8 +65,14 @@
       39,
       40
     ],
-    "visible_layers": "0000030_00000000",
-    "zone_display_mode": 0
+    "visible_layers": "000907b_80000001",
+    "zone_display_mode": 1
+  },
+  "git": {
+    "repo_password": "",
+    "repo_type": "",
+    "repo_username": "",
+    "ssh_key": ""
   },
   "meta": {
     "filename": "stlink_v3mini_adapter.kicad_prl",

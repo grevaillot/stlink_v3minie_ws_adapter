@@ -4,4 +4,5 @@ tags
 *.map
 *.d
 *.o
+*-backups
 generated.*.ld

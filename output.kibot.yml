@@ -21,12 +21,22 @@ variants:
     variant: rotated
     pre_transform: _rot_footprint
 
+preflight:
+  drc:
+    dont_stop: true
+    format: HTML
+    dir: validation/
+  erc:
+    dont_stop: true
+    format: HTML
+    dir: validation/
+
 # JLCPCB Gerber Output
 outputs:
   - name: JLCPCB_gerbers
     comment: Gerbers compatible with JLCPCB
     type: gerber
-    dir: JLCPCB
+    dir: fabrication/JLCPCB
     options: &gerber_options
       exclude_edge_layer: true
       exclude_pads_from_silkscreen: true
@@ -60,7 +70,7 @@ outputs:
   - name: JLCPCB_drill
     comment: Drill files compatible with JLCPCB
     type: excellon
-    dir: JLCPCB
+    dir: fabrication/JLCPCB
     options:
       pth_and_npth_single_file: false
       pth_id: "-PTH"
@@ -72,7 +82,7 @@ outputs:
   - name: JLCPCB
     comment: ZIP file for JLCPCB
     type: compress
-    dir: Fabrication/JLCPCB
+    dir: fabrication/
     options:
       files:
         - from_output: JLCPCB_gerbers
@@ -80,20 +90,22 @@ outputs:
         - from_output: JLCPCB_drill
           dest: /
 
-  # html ibom
   - name: ibom
     comment: Interactive BOM
     type: ibom
-    dir: Fabrication/ibom
+    dir: export/
     options:
-      dark_mode: true
       name_format: "index"
+      highlight_pin1: true
+      include_tracks: true
+      extra_fields: 'LCSC'
+      layer_view: 'F'
 
   # JLCPCB assembly positions of components
   - name: "JLCPCB_position"
     comment: "Pick and place file, JLCPCB style"
     type: position
-    dir: Fabrication/JLCPCB-BOM
+    dir: fabrication/JLCPCB
     options:
       variant: rotated
       output: "%f_cpl_jlc.%x"
@@ -119,7 +131,7 @@ outputs:
   - name: "JLCPCB_bom"
     comment: "BoM for JLCPCB"
     type: bom
-    dir: Fabrication/JLCPCB-BOM
+    dir: fabrication/
     options:
       output: "%f_%i_jlc.%x"
       exclude_filter: "only_jlc_parts"
@@ -141,26 +153,31 @@ outputs:
 
   # PDF of Schematic with dracula theme
   - name: "SchPrint"
-    comment: "Print schematic PDF"
+    comment: "schematic PDF"
     type: pdf_sch_print
-    dir: Fabrication/PDFs
+    dir: export/
     options:
       color_theme: dracula
       background_color: true
-      
-      
+ 
+  - name: Step
+    comment: "Generate 3D model (STEP)"
+    type: step
+    dir: export
+    options:
+      metric_units: true
+      origin: drill
   - name: basic_render_3d_top
-    comment: 3D view from top
+    comment: "3D view from top"
     type: render_3d
-    dir: 3D
+    dir: export
     options:
       ray_tracing: true
       orthographic: true
-      
   - name: basic_render_3d_30deg
-    comment: 3D view from 30 degrees
+    comment: "3D view from 30 degrees"
     type: render_3d
-    dir: 3D
+    dir: export
     output_id: 30deg
     options:
       ray_tracing: true
@@ -169,9 +186,8 @@ outputs:
   - name: basic_render_3d_bottom
     comment: 3D view from bottom
     type: render_3d
-    dir: 3D
+    dir: export
     options:
       ray_tracing: true
       orthographic: true
       view: bottom
-
