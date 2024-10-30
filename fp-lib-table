@@ -1,3 +1,4 @@
 (fp_lib_table
+  (version 7)
   (lib (name "stlink_v3mini")(type "KiCad")(uri "${KIPRJMOD}/stlink_v3mini.pretty")(options "")(descr ""))
 )
