@@ -1,6 +1,6 @@
 Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
-"D1","LED","LED_0603_1608Metric",52.3240,-67.9450,0.0000,top
-"D2","LED","LED_0603_1608Metric",52.3240,-66.2940,0.0000,top
+"D1","LED","LED_0603_1608Metric",52.2500,-66.0000,0.0000,top
+"D2","LED","LED_0603_1608Metric",52.2500,-68.0000,0.0000,top
 "D4","PESD3V3L1BA","R_0603_1608Metric",65.2780,-74.0410,180.0000,top
 "D5","PESD3V3L1BA","R_0603_1608Metric",65.2780,-75.5650,180.0000,top
 "D6","PESD3V3L1BA","R_0603_1608Metric",65.2780,-77.0890,180.0000,top
@@ -9,8 +9,8 @@ Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
 "D9","D_Schottky","D_SOD-523",61.3410,-78.4860,270.0000,top
 "F2","Polyfuse_Small","Fuse_0603_1608Metric",61.3410,-75.5650,90.0000,top
 "J1","Conn_02x07_Odd_Even","PinHeader_2x07_P1.27mm_Vertical_SMD",55.0000,-75.6900,0.0000,top
-"R1","2k2","R_0402_1005Metric",49.5300,-67.8180,180.0000,top
-"R2","2k2","R_0402_1005Metric",49.5300,-66.0400,180.0000,top
+"R1","2k2","R_0402_1005Metric",49.5300,-66.0000,180.0000,top
+"R2","2k2","R_0402_1005Metric",49.5000,-68.0000,180.0000,top
 "R6","100","R_0402_1005Metric",68.5800,-77.5970,0.0000,top
 "R7","100","R_0402_1005Metric",68.5800,-76.5810,0.0000,top
 "R8","100","R_0402_1005Metric",68.5800,-75.5650,0.0000,top
